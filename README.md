@@ -1,15 +1,6 @@
 # PixelProbe: Image Forgery Detection System 🔍
 
 Welcome to **PixelProbe**! This project is designed to unveil the truth hidden in images by detecting whether an image is authentic or tampered. Using advanced machine learning techniques combined with Error Level Analysis (ELA), PixelProbe reveals alterations in images that might not be visible to the naked eye. Built on a deep learning model, the system is wrapped in a user-friendly interface powered by Streamlit, allowing users to easily upload images and get real-time predictions.
-
-## Table of Contents
-- [Features](#features)
-- [Demo](#demo)
-- [How It Works](#how-it-works)
-- [Model Architecture](#model-architecture)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contact](#contact)
   
 ## Features 🌟
 - **Upload Image**: Users can upload any image (JPEG, PNG) and have it analyzed in real time.
@@ -21,12 +12,30 @@ Welcome to **PixelProbe**! This project is designed to unveil the truth hidden i
 ## Demo 💻
 You can try out PixelProbe by uploading any image, and within seconds, you’ll receive a detailed prediction on whether the image is `Authentic` or `Tampered`.
 
-
 ## How It Works 🛠️
 PixelProbe uses **Error Level Analysis (ELA)** to highlight regions in an image that have undergone compression, which may indicate tampering. The steps are as follows:
 1. **Image Upload**: Upload an image via the provided interface.
 2. **ELA Processing**: The image is processed using ELA, which highlights parts of the image with different compression levels.
 3. **Model Prediction**: A pre-trained Convolutional Neural Network (CNN) analyzes the processed image and classifies it as `Authentic` or `Tampered`.
+
+### Why ELA is performed:
+ELA (Error Level Analysis) detects compression inconsistencies in images. When an image is tampered with:
+
+- The original parts have been compressed once (at original JPEG quality)
+- The tampered/copied parts have different compression history
+- ELA highlights these differences by re-compressing the image and calculating pixel-level errors
+
+### How it works in your code:
+
+Original image is re-saved at quality 90. Difference between original and re-compressed version is calculated. Areas with different compression levels show up as bright spots in ELA. This becomes the input to your CNN instead of the raw image
+
+### Is it necessary?
+Yes, it's crucial for this approach because:
+
+Raw images look identical to human eyes (and CNNs) when tampered professionally. ELA converts invisible tampering artifacts into visible patterns. The CNN learns to recognize these ELA patterns, not the image content itself. Without ELA, there would need of a much deeper network and more data to detect subtle forgeries
+
+**Example:** A copy-pasted object looks perfect in the original image, but in ELA, it appears brighter because it has been compressed more times than the background.
+**Bottom line:** ELA is the feature extraction technique that makes forgery detection feasible with a relatively simple CNN architecture.
 
 ## Model Architecture 🧠
 The core model is a **Convolutional Neural Network (CNN)** built using Keras and TensorFlow. It includes several layers like `Conv2D`, `MaxPooling2D`, `BatchNormalization`, `Dropout`, and `Dense` layers to ensure robust image classification. The model was trained on the **CASIA v2** dataset, a popular benchmark for image tampering detection.
