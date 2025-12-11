@@ -25,7 +25,7 @@ ELA (Error Level Analysis) detects compression inconsistencies in images. When a
 - The tampered/copied parts have different compression history
 - ELA highlights these differences by re-compressing the image and calculating pixel-level errors
 
-### How it works in your code:
+### How it works in code:
 
 Original image is re-saved at quality 90. Difference between original and re-compressed version is calculated. Areas with different compression levels show up as bright spots in ELA. This becomes the input to your CNN instead of the raw image
 
